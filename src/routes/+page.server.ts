@@ -46,18 +46,40 @@ export const actions = {
 }
 
 // TODO: handle missing data, look at other attributes, etc.
-// TODO: trim off the start and end of domain
+function getLinkTitle(head: HTMLHeadElement | null) {
+    let title = head?.querySelector('meta[property="og:title"]')?.getAttribute('content') ?? '';
+    if (!title) title = head?.querySelector('title')?.textContent ?? '';
+    return title;
+}
+
+function getLinkDescription(document: Document, head: HTMLHeadElement | null) {
+    let description = head?.querySelector('meta[name="description"]')?.getAttribute('content') ?? '';
+    if (!description) {
+        description = document.querySelector('h1')?.textContent ?? '';
+    }
+    return description;
+}
+
+function getLinkImage(head: HTMLHeadElement | null) {
+    let image = head?.querySelector('meta[property="og:image"]')?.getAttribute('content') ?? '';
+    if (!image) image = '/placeholder.png';
+    return image;
+}
+
+function getLinkDomain(url: string, head: HTMLHeadElement | null) {
+    let domain = head?.querySelector('meta[property="og:url"]')?.getAttribute('content');
+    if (!domain) domain = url;
+    return getPrettyDomain(domain);
+}
+
 function getLinkData(url: string, text: string): Bookmark {
     const { document } = parseHTML(text);
     const head = document.querySelector('head');
-    const title = head?.querySelector('meta[property="og:title"]')?.getAttribute('content') ?? '';
-    const description = head?.querySelector('meta[name="description"]')?.getAttribute('content') ?? '';
-    const image = head?.querySelector('meta[property="og:image"]')?.getAttribute('content') ?? '';
-    const fullDomain = head?.querySelector('meta[property="og:url"]')?.getAttribute('content');
-    const domain = getPrettyDomain(fullDomain);
-    console.log(fullDomain, domain);
+    const title = getLinkTitle(head);
+    const description = getLinkDescription(document, head);
+    const image = getLinkImage(head);
+    const domain = getLinkDomain(url, head);
 
-    // bookmarks.push({ url, title, description, image, domain });
     return { url, title, description, image, domain };
 }
 

@@ -1,9 +1,9 @@
 import type { Bookmark } from "../../types";
 
 const db = new Map();
+const tags = new Map();
 
 export function getBookmarks(userId: string) {
-    console.log('getting bookmarks');
     if (!db.get(userId)) {
         db.set(userId, []);
     }
@@ -24,4 +24,17 @@ export function deleteBookmark(userId: string, bookmarkId: string) {
     let bookmarks = db.get(userId);
     const updated = bookmarks.filter((bookmark: Bookmark) => bookmark.id !== bookmarkId);
     db.set(userId, updated);
+}
+
+export function getTags(userId: string) {
+    if (!tags.get(userId)) {
+        tags.set(userId, new Set());
+    }
+
+    return tags.get(userId);
+}
+
+export function createTag(userId: string, tag: string) {
+    const currTags = tags.get(userId);
+    currTags.add(tag);
 }

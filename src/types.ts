@@ -1,3 +1,9 @@
+export type Tag = {
+    id: string;
+    name: string;
+    value: string;
+}
+
 export type Bookmark = {
     id?: string;
     url: string;
@@ -5,4 +11,5 @@ export type Bookmark = {
     description: string;
     image: string;
     domain: string;
+    tags?: Tag[];
 }

@@ -73,15 +73,12 @@
 
     ul {
         list-style-type: none;
+        padding-left: 0;
     }
 
     a {
         text-decoration: none;
         color: unset;
-    }
-
-    a:hover {
-        text-decoration: underline;
     }
 }
 
@@ -90,6 +87,12 @@
         display: flex;
         gap: 1em;
         align-items: start;
+        padding: 0.5em;
+        transition: 0.25s;
+    }
+
+    .list-item:hover {
+        background-color: blanchedalmond;
     }
 
     .list-item__image {
@@ -104,10 +107,15 @@
         display: flex;
         flex-direction: column;
         gap: 0.5em;
+        flex-grow: 1;
     }
 
     .list-item__content h4 {
         font-size: 0.95rem;
+    }
+
+    .list-item__content a:hover {
+        text-decoration: underline;
     }
 
     .list-item__content p {

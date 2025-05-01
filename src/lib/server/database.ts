@@ -1,18 +1,18 @@
 import type { Bookmark } from "../../types";
 
-const db = new Map();
-const tags = new Map();
+const bookmarkData = new Map();
+const tagData = new Map();
 
 export function getBookmarks(userId: string) {
-    if (!db.get(userId)) {
-        db.set(userId, []);
+    if (!bookmarkData.get(userId)) {
+        bookmarkData.set(userId, []);
     }
 
-    return db.get(userId);
+    return bookmarkData.get(userId);
 }
 
 export function createBookmark(userId: string, bookmark: Bookmark) {
-    const bookmarks = db.get(userId);
+    const bookmarks = bookmarkData.get(userId);
 
     bookmarks.push({
         ...bookmark,
@@ -21,20 +21,25 @@ export function createBookmark(userId: string, bookmark: Bookmark) {
 }
 
 export function deleteBookmark(userId: string, bookmarkId: string) {
-    let bookmarks = db.get(userId);
+    let bookmarks = bookmarkData.get(userId);
     const updated = bookmarks.filter((bookmark: Bookmark) => bookmark.id !== bookmarkId);
-    db.set(userId, updated);
+    bookmarkData.set(userId, updated);
 }
 
 export function getTags(userId: string) {
-    if (!tags.get(userId)) {
-        tags.set(userId, new Set());
+    if (!tagData.get(userId)) {
+        tagData.set(userId, []);
     }
 
-    return tags.get(userId);
+    return tagData.get(userId);
 }
 
 export function createTag(userId: string, tag: string) {
-    const currTags = tags.get(userId);
-    currTags.add(tag);
+    const currTags = tagData.get(userId);
+    currTags.push({
+        name: tag,
+        value: tag.toLowerCase(),
+        id: crypto.randomUUID(),
+    });
+    console.log(currTags);
 }

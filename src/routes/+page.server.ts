@@ -10,7 +10,8 @@ export function load({ cookies }) {
     }
 
     return {
-        bookmarks: db.getBookmarks(id)
+        bookmarks: db.getBookmarks(id),
+        tags: db.getTags(id),
     };
 }
 
@@ -41,6 +42,14 @@ export const actions = {
             const data = await request.formData();
             const bookmarkId = data.get('bookmarkId') as string;
             db.deleteBookmark(id, bookmarkId);
+        }
+    },
+    createTag: async ({ cookies, request }) => {
+        let id = cookies.get('userId');
+        if (id) {
+            const data = await request.formData();
+            const tagName = data.get('tagName') as string;
+            db.createTag(id, tagName);
         }
     }
 }

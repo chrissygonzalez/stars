@@ -10,9 +10,20 @@
         <button>Save</button>
     </form>
 
-    {#if selected.length > 0}
-        <p>Tag UI will go here</p>
-    {/if}
+    <!-- {#if selected.length > 0} -->
+    <div class="tags__container">
+        <form method="POST" action="?/createTag">
+            <label for="tagName">Add Tags:</label>
+            <input type="text" name="tagName" id="tagName" />
+            <button>Add</button>
+        </form>
+        <div class="tag-badge__container">
+            {#each data.tags as { id, name }}
+                <div class="tag-badge">{name}</div>
+            {/each}
+        </div>
+    </div>
+    <!-- {/if} -->
 
     <ul role="list">
         {#each data.bookmarks as { id, url, title, description, image, domain }}

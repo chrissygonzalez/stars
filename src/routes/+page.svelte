@@ -1,6 +1,29 @@
 <script lang="ts">
+    import type { Bookmark, Tag } from "../types.js";
     let { data } = $props();
     let selected = $state([]);
+    let bookmarks = $derived(data.bookmarks);
+
+    // console.log("all bookmarks:", data.bookmarks);
+    // console.log("all tags:", data.tags);
+
+    const addTags = async (tagId: string) => {
+        for (let bookmarkId of selected) {
+            let updated = await fetch(`/api/bookmarks/${bookmarkId}`, {
+                method: "PUT",
+                body: JSON.stringify({ tagId }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            // bookmark.tags.push(tagId);
+            let bookmark = bookmarks.find((item) => item.id === bookmarkId);
+            if (bookmark) {
+                bookmark.tags.push(tagId);
+                bookmarks = bookmarks;
+            }
+        }
+    };
 </script>
 
 <main>
@@ -19,14 +42,20 @@
         </form>
         <div class="tag-badge__container">
             {#each data.tags as { id, name }}
-                <div class="tag-badge">{name}</div>
+                <button
+                    onclick={() => addTags(id)}
+                    disabled={selected.length === 0}
+                    class="tag-badge"
+                >
+                    {name}
+                </button>
             {/each}
         </div>
     </div>
     <!-- {/if} -->
 
     <ul role="list">
-        {#each data.bookmarks as { id, url, title, description, image, domain }}
+        {#each bookmarks as { id, url, title, description, image, domain, tags }}
             <li>
                 <label for={`checkbox-${id}`}>
                     <div class="list-item">
@@ -44,6 +73,13 @@
                                 </h4>
                             </a>
                             <p>{description}</p>
+                            <div>
+                                {#each tags as tag}
+                                    {data.tags.find(
+                                        (item: Tag) => item.id === tag,
+                                    )?.name}
+                                {/each}
+                            </div>
                         </div>
                         <form method="POST" action="?/delete">
                             <input

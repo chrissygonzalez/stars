@@ -24,7 +24,7 @@ export const actions = {
             throw new Error(`Failed to fetch: ${response.status}`);
         }
 
-        // Fetch the page as text
+        // Fetch the bookmarked page as text
         const text = await response.text();
         // Get the page head and pull out the necessary info
         const linkData = getLinkData(url, text);
@@ -54,7 +54,7 @@ export const actions = {
     }
 }
 
-// TODO: handle missing data, look at other attributes, etc.
+// TODO: move these helper functions somewhere else
 function getLinkTitle(head: HTMLHeadElement | null) {
     let title = head?.querySelector('meta[property="og:title"]')?.getAttribute('content') ?? '';
     if (!title) title = head?.querySelector('title')?.textContent ?? '';
@@ -89,7 +89,7 @@ function getLinkData(url: string, text: string): Bookmark {
     const image = getLinkImage(head);
     const domain = getLinkDomain(url, head);
 
-    return { url, title, description, image, domain };
+    return { url, title, description, image, domain, tags: [] };
 }
 
 function getPrettyDomain(domain: string | null | undefined) {

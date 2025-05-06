@@ -11,5 +11,5 @@ export type Bookmark = {
     description: string;
     image: string;
     domain: string;
-    tags?: Tag[];
+    tags: string[];
 }

@@ -5,7 +5,7 @@ export type Tag = {
 }
 
 export type Bookmark = {
-    id?: string;
+    id: string;
     url: string;
     title: string;
     description: string;

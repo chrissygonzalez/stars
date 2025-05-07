@@ -9,19 +9,35 @@
 
     const addTags = async (tagId: string) => {
         for (let bookmarkId of selected) {
-            let updated = await fetch(`/api/bookmarks/${bookmarkId}`, {
+            await fetch(`/api/bookmarks/${bookmarkId}`, {
                 method: "PUT",
-                body: JSON.stringify({ tagId }),
+                body: JSON.stringify({ tagId, action: "addTag" }),
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
-            // bookmark.tags.push(tagId);
+            // optimistic update to trigger reactivity
             let bookmark = bookmarks.find((item) => item.id === bookmarkId);
             if (bookmark) {
                 bookmark.tags.push(tagId);
                 bookmarks = bookmarks;
             }
+        }
+    };
+
+    const removeTag = async (tagId: string, bookmarkId: string) => {
+        await fetch(`/api/bookmarks/${bookmarkId}`, {
+            method: "PUT",
+            body: JSON.stringify({ tagId, action: "removeTag" }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        // optimistic update to trigger reactivity
+        let bookmark = bookmarks.find((item) => item.id === bookmarkId);
+        if (bookmark) {
+            bookmark.tags = bookmark.tags.filter((item) => item !== tagId);
+            bookmarks = bookmarks;
         }
     };
 </script>
@@ -45,7 +61,7 @@
                 <button
                     onclick={() => addTags(id)}
                     disabled={selected.length === 0}
-                    class="tag-badge"
+                    class="tag-button"
                 >
                     {name}
                 </button>
@@ -73,11 +89,19 @@
                                 </h4>
                             </a>
                             <p>{description}</p>
-                            <div>
-                                {#each tags as tag}
-                                    {data.tags.find(
-                                        (item: Tag) => item.id === tag,
-                                    )?.name}
+                            <div class="tag-badge__container">
+                                {#each tags as tagId}
+                                    <div class="tag-badge">
+                                        {data.tags.find(
+                                            (item: Tag) => item.id === tagId,
+                                        )?.name}
+                                        <button
+                                            onclick={() => removeTag(tagId, id)}
+                                            class="tag-badge__button"
+                                        >
+                                            x
+                                        </button>
+                                    </div>
                                 {/each}
                             </div>
                         </div>

@@ -36,10 +36,17 @@ export function addTagToBookmark(userId: string, bookmarkId: string, tagId: stri
         let bookmark = bookmarks.find(item => item.id === bookmarkId);
         if (bookmark) {
             bookmark.tags?.push(tagId);
-            // getBookmarks(userId);
-            // const copy = [...bookmarks];
-            // bookmarkData.set(userId, copy);
-            // bookmarkData = bookmarkData;
+        }
+    }
+}
+
+export function removeTagFromBookmark(userId: string, bookmarkId: string, tagId: string) {
+    const bookmarks = bookmarkData.get(userId);
+    if (bookmarks) {
+        let bookmark = bookmarks.find(item => item.id === bookmarkId);
+        if (bookmark) {
+            const filtered = bookmark.tags.filter(item => item !== tagId)
+            bookmark.tags = filtered;
         }
     }
 }
@@ -59,4 +66,16 @@ export function createTag(userId: string, tag: string) {
         value: tag.toLowerCase(),
         id: crypto.randomUUID(),
     });
+}
+
+export function deleteTag(userId: string, tagId: string) {
+    let tags = tagData.get(userId);
+    const bookmarks = bookmarkData.get(userId);
+    if (tags && bookmarks) {
+        const tagged = bookmarks.filter(item => item.tags.includes(tagId));
+        for (let bookmark of tagged) {
+            bookmark.tags = bookmark.tags.filter(id => id !== tagId);
+        }
+        tags = tags.filter(tag => tag.id !== tagId);
+    }
 }

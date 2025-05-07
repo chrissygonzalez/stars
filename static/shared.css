@@ -89,16 +89,37 @@
         margin-top: 1em;
     }
 
-    .tag-badge__container {
+    .tag-button__container {
         display: flex;
         gap: 10px;
         padding: 1em;
     }
 
-    .tag-badge {
+    .tag-button {
         background-color: aquamarine;
         padding: 5px 8px;
         border-radius: 3px;
+    }
+
+    .tag-badge__container {
+        display: flex;
+        gap: 10px;
+    }
+
+    .tag-badge {
+        background-color: pink;
+        padding: 5px 8px;
+        border-radius: 3px;
+    }
+
+    .tag-badge__button {
+        border: unset;
+        background-color: unset;
+    }
+
+    .tag-badge__button:hover {
+        background-color: #00000030;
+        transition: 0.5s;
     }
 
     .list-item {

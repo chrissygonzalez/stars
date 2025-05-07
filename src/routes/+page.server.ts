@@ -89,7 +89,7 @@ function getLinkData(url: string, text: string): Bookmark {
     const image = getLinkImage(head);
     const domain = getLinkDomain(url, head);
 
-    return { url, title, description, image, domain, tags: [] };
+    return { url, title, description, image, domain, tags: [], id: '' };
 }
 
 function getPrettyDomain(domain: string | null | undefined) {

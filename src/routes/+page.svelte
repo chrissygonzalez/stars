@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { Bookmark, Tag } from "../types.js";
+    import TagBadge from "$lib/components/TagBadge.svelte";
     let { data } = $props();
     let selected = $state([]);
     let bookmarks = $derived(data.bookmarks);
@@ -42,81 +43,100 @@
     };
 </script>
 
-<main>
+<header>
     <form method="POST" action="?/create">
         <label for="url">Add a bookmark</label>
         <input id="url" name="url" type="text" required />
         <button>Save</button>
     </form>
+</header>
 
-    <!-- {#if selected.length > 0} -->
-    <div class="tags__container">
-        <form method="POST" action="?/createTag">
-            <label for="tagName">Add Tags:</label>
-            <input type="text" name="tagName" id="tagName" />
-            <button>Add</button>
-        </form>
-        <div class="tag-badge__container">
-            {#each data.tags as { id, name }}
-                <button
-                    onclick={() => addTags(id)}
-                    disabled={selected.length === 0}
-                    class="tag-button"
-                >
-                    {name}
-                </button>
-            {/each}
+<div class="content">
+    <aside>
+        <div>
+            <h3>Tags</h3>
+            <div class="tags__container">
+                <form method="POST" action="?/createTag">
+                    <label for="tagName">Add a tag:</label>
+                    <input type="text" name="tagName" id="tagName" />
+                    <!-- <button>Add</button> -->
+                </form>
+                <div class="tag-badge__container">
+                    {#each data.tags as { id, name, color }}
+                        <button
+                            onclick={() => addTags(id)}
+                            disabled={selected.length === 0}
+                            class="tag-button"
+                            style="--color: {color}"
+                        >
+                            {name}
+                        </button>
+                    {/each}
+                </div>
+            </div>
         </div>
-    </div>
-    <!-- {/if} -->
 
-    <ul role="list">
-        {#each bookmarks as { id, url, title, description, image, domain, tags }}
-            <li>
-                <label for={`checkbox-${id}`}>
-                    <div class="list-item">
-                        <input
-                            type="checkbox"
-                            id={`checkbox-${id}`}
-                            value={id}
-                            bind:group={selected}
-                        />
-                        <img class="list-item__image" src={image} alt={title} />
-                        <div class="list-item__content">
-                            <a href={url} target="_blank">
-                                <h4>
-                                    {title} | <span>{domain}</span>
-                                </h4>
-                            </a>
-                            <p>{description}</p>
-                            <div class="tag-badge__container">
-                                {#each tags as tagId}
-                                    <div class="tag-badge">
-                                        {data.tags.find(
-                                            (item: Tag) => item.id === tagId,
-                                        )?.name}
-                                        <button
-                                            onclick={() => removeTag(tagId, id)}
-                                            class="tag-badge__button"
-                                        >
-                                            x
-                                        </button>
-                                    </div>
-                                {/each}
-                            </div>
-                        </div>
-                        <form method="POST" action="?/delete">
+        <div>
+            <h3>Folders</h3>
+        </div>
+    </aside>
+
+    <main>
+        <h1>Bookmarks</h1>
+
+        <ul role="list">
+            {#each bookmarks as { id, url, title, description, image, domain, tags }}
+                <li>
+                    <label for={`checkbox-${id}`}>
+                        <div class="list-item">
                             <input
-                                type="hidden"
-                                id="bookmarkId"
-                                name="bookmarkId"
+                                type="checkbox"
+                                id={`checkbox-${id}`}
                                 value={id}
+                                bind:group={selected}
                             />
-                            <button>Delete</button>
-                        </form>
-                    </div>
-                </label>
-            </li>
-        {/each}
-    </ul>
-</main>
+                            <img
+                                class="list-item__image"
+                                src={image}
+                                alt={title}
+                            />
+                            <div class="list-item__content">
+                                <a href={url} target="_blank">
+                                    <h4>
+                                        {title} | <span>{domain}</span>
+                                    </h4>
+                                </a>
+                                <p>{description}</p>
+                                <div class="tag-badge__container">
+                                    {#each tags as tagId}
+                                        <TagBadge
+                                            tags={data.tags}
+                                            {tagId}
+                                            {removeTag}
+                                            {id}
+                                        />
+                                    {/each}
+                                </div>
+                            </div>
+                            <form method="POST" action="?/delete">
+                                <input
+                                    type="hidden"
+                                    id="bookmarkId"
+                                    name="bookmarkId"
+                                    value={id}
+                                />
+                                <button>Delete</button>
+                            </form>
+                        </div>
+                    </label>
+                </li>
+            {/each}
+        </ul>
+    </main>
+</div>
+
+<style>
+    .tag-button {
+        background-color: var(--color, green);
+    }
+</style>

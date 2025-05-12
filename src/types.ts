@@ -2,6 +2,7 @@ export type Tag = {
     id: string;
     name: string;
     value: string;
+    color: string;
 }
 
 export type Bookmark = {

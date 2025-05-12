@@ -56,14 +56,32 @@
         line-height: 1.4;
     }
 
+    header {
+        height: 60px;
+        background-color: aqua;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+    }
+
+    .content {
+        display: flex;
+        justify-content: space-around;
+    }
+
     main {
-        width: 80%;
-        max-width: 800px;
         background-color: var(--white);
         height: 100vh;
         padding: 1rem;
         margin-left: auto;
         margin-right: auto;
+        flex-grow: 1;
+        /* display: flex; */
+    }
+
+    aside {
+        padding: 1em;
+        flex-shrink: 1;
     }
 
     h4,
@@ -84,9 +102,9 @@
 
 @layer modules {
     .tags__container {
-        border: 1px solid #000;
-        padding: 1em;
-        margin-top: 1em;
+        /* border: 1px solid #000; */
+        /* padding: 1em;
+        margin-top: 1em; */
     }
 
     .tag-button__container {
@@ -96,9 +114,11 @@
     }
 
     .tag-button {
-        background-color: aquamarine;
-        padding: 5px 8px;
-        border-radius: 3px;
+        /* background-color: var(--color, aquamarine); */
+        padding: 3px 5px;
+        border-radius: 6px;
+        font-size: 0.8em;
+        border: none;
     }
 
     .tag-badge__container {

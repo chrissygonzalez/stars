@@ -65,6 +65,7 @@ export function createTag(userId: string, tag: string) {
         name: tag,
         value: tag.toLowerCase(),
         id: crypto.randomUUID(),
+        color: getRandomHexColor(),
     });
 }
 
@@ -78,4 +79,13 @@ export function deleteTag(userId: string, tagId: string) {
         }
         tags = tags.filter(tag => tag.id !== tagId);
     }
+}
+
+// TODO: move this wherever helper functions go
+function getRandomHexColor() {
+    const red = Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
+    const green = Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
+    const blue = Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
+
+    return `#${red}${green}${blue}`;
 }

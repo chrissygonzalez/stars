@@ -45,6 +45,10 @@
     :root {
         --background-color: #eaeaea;
         --white: #fff;
+        --black: #000;
+        --light-gray: #ccc;
+        --list-item-hover: #dfe7f3;
+        --header: #3d586b;
     }
 }
 
@@ -58,7 +62,7 @@
 
     header {
         height: 60px;
-        background-color: aqua;
+        background-color: var(--header);
         display: flex;
         justify-content: end;
         align-items: center;
@@ -76,12 +80,15 @@
         margin-left: auto;
         margin-right: auto;
         flex-grow: 1;
-        /* display: flex; */
     }
 
     aside {
+        display: flex;
+        flex-direction: column;
         padding: 1em;
+        flex-grow: 0;
         flex-shrink: 1;
+        max-width: 250px;
     }
 
     h4,
@@ -114,27 +121,34 @@
     }
 
     .tag-button {
-        /* background-color: var(--color, aquamarine); */
         padding: 3px 5px;
         border-radius: 6px;
         font-size: 0.8em;
         border: none;
+        cursor: pointer;
+    }
+
+    .tag-button:hover {
+        outline: 1px solid var(--black);
     }
 
     .tag-badge__container {
         display: flex;
         gap: 10px;
+        flex-wrap: wrap;
     }
 
     .tag-badge {
-        background-color: pink;
-        padding: 5px 8px;
         border-radius: 3px;
+        display: flex;
+        font-size: 0.8em;
+        align-items: stretch;
     }
 
     .tag-badge__button {
         border: unset;
         background-color: unset;
+        cursor: pointer;
     }
 
     .tag-badge__button:hover {
@@ -142,16 +156,26 @@
         transition: 0.5s;
     }
 
+    .tag-badge__button svg {
+        width: 15px;
+    }
+
+    .tag-badge span {
+        align-self: center;
+        padding: 5px 5px 5px 8px;
+    }
+
     .list-item {
         display: flex;
         gap: 1em;
         align-items: start;
-        padding: 0.5em;
+        padding: 1em 0.5em;
         transition: 0.25s;
+        border-bottom: 1px solid var(--light-gray);
     }
 
     .list-item:hover {
-        background-color: blanchedalmond;
+        background-color: var(--list-item-hover);
     }
 
     .list-item__image {

@@ -56,23 +56,30 @@
         <div>
             <h3>Tags</h3>
             <div class="tags__container">
-                <form method="POST" action="?/createTag">
-                    <label for="tagName">Add a tag:</label>
-                    <input type="text" name="tagName" id="tagName" />
-                    <!-- <button>Add</button> -->
-                </form>
                 <div class="tag-badge__container">
                     {#each data.tags as { id, name, color }}
                         <button
                             onclick={() => addTags(id)}
-                            disabled={selected.length === 0}
                             class="tag-button"
                             style="--color: {color}"
                         >
                             {name}
                         </button>
                     {/each}
+                    <button>+ New tag</button>
                 </div>
+
+                <form method="POST" action="?/createTag">
+                    <!-- <label for="tagName">Add a tag:</label> -->
+                    <input
+                        aria-label="new tag name text"
+                        type="text"
+                        name="tagName"
+                        id="tagName"
+                        placeholder="Tag name"
+                    />
+                    <!-- <button>Add</button> -->
+                </form>
             </div>
         </div>
 

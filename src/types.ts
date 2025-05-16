@@ -13,4 +13,5 @@ export type Bookmark = {
     image: string;
     domain: string;
     tags: string[];
+    date: number;
 }

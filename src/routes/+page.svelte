@@ -1,12 +1,10 @@
 <script lang="ts">
-    import type { Bookmark, Tag } from "../types.js";
-    import TagBadge from "$lib/components/TagBadge.svelte";
+    import type { Tag } from "../types.js";
+    import BookmarkItem from "$lib/components/BookmarkItem.svelte";
     let { data } = $props();
     let selected = $state([]);
+    let showTagInput = $state(false);
     let bookmarks = $derived(data.bookmarks);
-
-    // console.log("all bookmarks:", data.bookmarks);
-    // console.log("all tags:", data.tags);
 
     const addTags = async (tagId: string) => {
         for (let bookmarkId of selected) {
@@ -27,6 +25,7 @@
     };
 
     const removeTag = async (tagId: string, bookmarkId: string) => {
+        console.log("removing tag", tagId);
         await fetch(`/api/bookmarks/${bookmarkId}`, {
             method: "PUT",
             body: JSON.stringify({ tagId, action: "removeTag" }),
@@ -41,6 +40,10 @@
             bookmarks = bookmarks;
         }
     };
+
+    const getTagData = (tagId: string) => {
+        return data.tags.find((item: Tag) => item.id === tagId);
+    };
 </script>
 
 <header>
@@ -51,6 +54,7 @@
     </form>
 </header>
 
+<!-- TODO: break tags and bookmarks into components, figure out who fetches the data and from where -->
 <div class="content">
     <aside>
         <div>
@@ -66,20 +70,24 @@
                             {name}
                         </button>
                     {/each}
-                    <button>+ New tag</button>
                 </div>
+                <div class="tag-badge__add">
+                    <button onclick={() => (showTagInput = !showTagInput)}>
+                        + New tag
+                    </button>
 
-                <form method="POST" action="?/createTag">
-                    <!-- <label for="tagName">Add a tag:</label> -->
-                    <input
-                        aria-label="new tag name text"
-                        type="text"
-                        name="tagName"
-                        id="tagName"
-                        placeholder="Tag name"
-                    />
-                    <!-- <button>Add</button> -->
-                </form>
+                    {#if showTagInput}
+                        <form method="POST" action="?/createTag">
+                            <input
+                                aria-label="new tag name text"
+                                type="text"
+                                name="tagName"
+                                id="tagName"
+                                placeholder="Tag name"
+                            />
+                        </form>
+                    {/if}
+                </div>
             </div>
         </div>
 
@@ -92,51 +100,13 @@
         <h1>Bookmarks</h1>
 
         <ul role="list">
-            {#each bookmarks as { id, url, title, description, image, domain, tags }}
-                <li>
-                    <label for={`checkbox-${id}`}>
-                        <div class="list-item">
-                            <input
-                                type="checkbox"
-                                id={`checkbox-${id}`}
-                                value={id}
-                                bind:group={selected}
-                            />
-                            <img
-                                class="list-item__image"
-                                src={image}
-                                alt={title}
-                            />
-                            <div class="list-item__content">
-                                <a href={url} target="_blank">
-                                    <h4>
-                                        {title} | <span>{domain}</span>
-                                    </h4>
-                                </a>
-                                <p>{description}</p>
-                                <div class="tag-badge__container">
-                                    {#each tags as tagId}
-                                        <TagBadge
-                                            tags={data.tags}
-                                            {tagId}
-                                            {removeTag}
-                                            {id}
-                                        />
-                                    {/each}
-                                </div>
-                            </div>
-                            <form method="POST" action="?/delete">
-                                <input
-                                    type="hidden"
-                                    id="bookmarkId"
-                                    name="bookmarkId"
-                                    value={id}
-                                />
-                                <button>Delete</button>
-                            </form>
-                        </div>
-                    </label>
-                </li>
+            {#each bookmarks as bookmark}
+                <BookmarkItem
+                    {bookmark}
+                    bind:selected
+                    {getTagData}
+                    {removeTag}
+                />
             {/each}
         </ul>
     </main>

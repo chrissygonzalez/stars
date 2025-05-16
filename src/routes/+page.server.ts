@@ -1,6 +1,7 @@
 import { parseHTML } from 'linkedom';
 import * as db from '$lib/server/database';
 import type { Bookmark } from '../types.js';
+import { redirect } from '@sveltejs/kit';
 
 export function load({ cookies }) {
     let id = cookies.get('userId');
@@ -50,6 +51,7 @@ export const actions = {
             const data = await request.formData();
             const tagName = data.get('tagName') as string;
             db.createTag(id, tagName);
+            redirect(303, '/');
         }
     }
 }
@@ -89,7 +91,7 @@ function getLinkData(url: string, text: string): Bookmark {
     const image = getLinkImage(head);
     const domain = getLinkDomain(url, head);
 
-    return { url, title, description, image, domain, tags: [], id: '' };
+    return { url, title, description, image, domain, tags: [], id: '', date: Date.now() };
 }
 
 function getPrettyDomain(domain: string | null | undefined) {

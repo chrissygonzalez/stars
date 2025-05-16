@@ -1,14 +1,13 @@
 <script lang="ts">
-    import type { Tag } from "../../types";
-    let { tags, tagId, removeTag, id } = $props();
-    let tag = $derived(tags.find((item: Tag) => item.id === tagId));
+    const { tag, removeTag, bookmarkId } = $props();
+    const { name, color, id: tagId } = tag;
 </script>
 
-<div class="tag-badge" style="--color: {tag.color}">
-    <span>{tag.name}</span>
+<div class="tag-badge" style="--color: {color}">
+    <span>{name}</span>
     <button
         aria-label="Remove tag"
-        onclick={() => removeTag(tagId, id)}
+        onclick={() => removeTag(tagId, bookmarkId)}
         class="tag-badge__button"
     >
         <svg

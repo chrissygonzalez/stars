@@ -18,7 +18,6 @@ export function createBookmark(userId: string, bookmark: Bookmark) {
     bookmarks?.push({
         ...bookmark,
         id: crypto.randomUUID(),
-        tags: []
     });
 }
 
@@ -45,7 +44,7 @@ export function removeTagFromBookmark(userId: string, bookmarkId: string, tagId:
     if (bookmarks) {
         let bookmark = bookmarks.find(item => item.id === bookmarkId);
         if (bookmark) {
-            const filtered = bookmark.tags.filter(item => item !== tagId)
+            const filtered = bookmark.tags.filter(item => item !== tagId);
             bookmark.tags = filtered;
         }
     }

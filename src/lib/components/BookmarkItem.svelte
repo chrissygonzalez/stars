@@ -9,9 +9,9 @@
         description,
         image,
         domain,
-        tags,
         date,
     } = bookmark;
+    let tags = $derived(bookmark.tags);
 </script>
 
 <li>

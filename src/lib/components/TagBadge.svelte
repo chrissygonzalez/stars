@@ -1,6 +1,6 @@
 <script lang="ts">
     const { tag, removeTag, bookmarkId } = $props();
-    const { name, color, id: tagId } = tag;
+    const { name, color, id: tagId } = $derived(tag);
 </script>
 
 <div class="tag-badge" style="--color: {color}">

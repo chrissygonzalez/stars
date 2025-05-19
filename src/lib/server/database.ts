@@ -81,10 +81,16 @@ export function deleteTag(userId: string, tagId: string) {
 }
 
 // TODO: move this wherever helper functions go
+function getRandomRGBValue() {
+    const MAX = 256;
+    const MIN = 0;
+    return Math.floor(Math.random() * (MAX - MIN) + MIN).toString(16).padStart(2, '0');
+}
+
 function getRandomHexColor() {
-    const red = Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
-    const green = Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
-    const blue = Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
+    const red = getRandomRGBValue();
+    const green = getRandomRGBValue();
+    const blue = getRandomRGBValue();
 
     return `#${red}${green}${blue}`;
 }

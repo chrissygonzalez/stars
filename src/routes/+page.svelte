@@ -25,7 +25,6 @@
     };
 
     const removeTag = async (tagId: string, bookmarkId: string) => {
-        console.log("removing tag", tagId);
         await fetch(`/api/bookmarks/${bookmarkId}`, {
             method: "PUT",
             body: JSON.stringify({ tagId, action: "removeTag" }),
@@ -45,14 +44,6 @@
         return data.tags.find((item: Tag) => item.id === tagId);
     };
 </script>
-
-<header>
-    <form method="POST" action="?/create">
-        <label for="url">Add a bookmark</label>
-        <input id="url" name="url" type="text" required />
-        <button>Save</button>
-    </form>
-</header>
 
 <!-- TODO: break tags and bookmarks into components, figure out who fetches the data and from where -->
 <div class="content">
@@ -97,18 +88,26 @@
     </aside>
 
     <main>
-        <h1>Bookmarks</h1>
+        <header>
+            <form method="POST" action="?/create">
+                <label for="url">Enter a URL</label>
+                <input id="url" name="url" type="text" required />
+                <button>Save as bookmark</button>
+            </form>
+        </header>
 
-        <ul role="list">
-            {#each bookmarks as bookmark}
-                <BookmarkItem
-                    {bookmark}
-                    bind:selected
-                    {getTagData}
-                    {removeTag}
-                />
-            {/each}
-        </ul>
+        <div class="list-area">
+            <ul role="list">
+                {#each bookmarks as bookmark}
+                    <BookmarkItem
+                        {bookmark}
+                        bind:selected
+                        {getTagData}
+                        {removeTag}
+                    />
+                {/each}
+            </ul>
+        </div>
     </main>
 </div>
 
